@@ -24,8 +24,10 @@ def emulate(m1: float, m2: float, v: float):
         global last_case
         last_case = (m1, m2, v)
         print("Пройденное растояние: {} метров".format(round(calculateDistance(), 2)))
+        return True
     else:
         print("Введено некорректное значение")
+        return False
 
 
 def set_values(m1: float, m2: float, v: float):

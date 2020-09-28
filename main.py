@@ -30,8 +30,8 @@ def manual_input():
     m2 = float(input("Масса ящика: "))
     v = float(input("Начальная скорость: "))
     global currentCase
-    currentCase = Case(m1, m2, v)
-    emulate(m1, m2, v)
+    if emulate(m1, m2, v):
+        currentCase = Case(m1, m2, v)
 
 
 def run_test_cases():
