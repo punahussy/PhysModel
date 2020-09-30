@@ -35,6 +35,7 @@ class DrawableBox:
         self.height = DEFAULT_BOX_HEIGHT
         self.width = DEFAULT_BOX_WIDTH
         self.x = x0
+        self.x0 = x0
         self.y = 0
         self.velocity = 0
 
@@ -61,7 +62,9 @@ def update_displayed_info():
 def reset_box_pos():
     update_time = round(Time * TIME_FACTOR, 2)
     Box.velocity = get_box_current_velocity(update_time)
-    Box.x = get_box_pos(update_time)
+    Box.x = Box.x0 = get_box_x0()
+    CannonBall.x = 0
+    CannonBall.y = 0
 
 
 def handle_keys():
@@ -94,7 +97,7 @@ def draw_everything(window):
     if not Impacted:
         ball_pos = convert_to_drawable(CannonBall.x, CannonBall.y)
         pg.draw.circle(window, RED, (ball_pos[0], ball_pos[1]), CannonBall.radius)
-    fix_box_pos = DEFAULT_BOX_WIDTH // 3 if get_box_x0() < (DEFAULT_BOX_WIDTH // 2) else 0
+    fix_box_pos = DEFAULT_BOX_HEIGHT // 3 if Box.x0 < (WINDOW_WIDTH // 2) else 0
     box_pos = convert_to_drawable(Box.x + fix_box_pos, Box.y)
     pg.draw.rect(window, (0, 255, 255), (box_pos[0], box_pos[1] - Box.height, Box.width, Box.height))
     window.blit(Ball_info, (WINDOW_WIDTH // 2, WINDOW_HEIGHT // 3))
@@ -117,9 +120,14 @@ def emulate_physics():
         CannonBall.x = ball_pos[0]
         CannonBall.y = ball_pos[1]
         CannonBall.velocity = ball_velocity
-        if CannonBall.y - DEFAULT_BOX_HEIGHT <= 0:
-            Impacted = True
-            Time = 0
+        if Box.x0 < WINDOW_WIDTH // 2:
+            if CannonBall.y - DEFAULT_BOX_HEIGHT <= 0:
+                Impacted = True
+                Time = 0
+        else:
+            if CannonBall.y - CannonBall.radius < 0:
+                Impacted = True
+                Time = 0
     update_displayed_info()
 
 
