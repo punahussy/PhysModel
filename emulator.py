@@ -4,10 +4,12 @@ from scipy import constants
 ball_mass = 0  # kg
 ball_start_velocity = 0  # m/s
 box_mass = 0  # kg
+box_stop_x = 0
 ANGLE = 45  # degrees
 FRICTION_COEFFICIENT = 0.58  # concrete
 GRAVITY_STRENGTH = 9.8
 last_case = (1, 5, 15)
+height = 0
 
 BALL_MAX_MASS = 220
 BALL_MAX_VELOCITY = constants.speed_of_light
@@ -30,7 +32,7 @@ def emulate(m1: float, m2: float, v: float):
         return False
 
 
-def set_values(m1: float, m2: float, v: float):
+def set_values(m1: float, m2: float, v: float, h: int):
     if input_is_valid(m1, m2, v):
         global ball_mass
         ball_mass = m1
@@ -38,6 +40,8 @@ def set_values(m1: float, m2: float, v: float):
         box_mass = m2
         global ball_start_velocity
         ball_start_velocity = v
+        global height
+        height = h
 
 
 def calculateDistance():
@@ -61,7 +65,7 @@ def input_is_valid(m1, m2, v):
     return True
 
 
-def get_ball_position(time, height):
+def get_ball_position(time):
     hor_velocity = ball_start_velocity * math.sin(math.radians(ANGLE))
     vert_velocity = ball_start_velocity * math.cos(math.radians(ANGLE))
 
@@ -79,7 +83,7 @@ def get_ball_velocity(time):
     return vt
 
 
-def get_box_x0(height):
+def get_box_x0():
     hor_velocity = ball_start_velocity * math.sin(math.radians(ANGLE))
     vert_velocity = ball_start_velocity * math.cos(math.radians(ANGLE))
     gravity_affection = math.sqrt((2 * (height - vert_velocity)) / GRAVITY_STRENGTH)
@@ -87,5 +91,33 @@ def get_box_x0(height):
     return x0
 
 
+def get_final_ball_velocity():
+    hor_velocity = ball_start_velocity * math.sin(math.radians(ANGLE))
+    vert_velocity = ball_start_velocity * math.cos(math.radians(ANGLE))
+    lower_sqrt = math.sqrt(2 * GRAVITY_STRENGTH * (height - vert_velocity))
+    v_final = math.sqrt(math.pow(hor_velocity, 2) + math.pow((-vert_velocity - lower_sqrt), 2))
+    return v_final
+    
+
+def get_box_start_velocity():
+    dividend = ball_mass * get_final_ball_velocity() * math.sin(math.radians(ANGLE))
+    divider = ball_mass + box_mass
+    start_velocity = dividend / divider
+    return start_velocity
+
+
+def get_box_current_velocity(time):
+    vt = get_box_start_velocity() - GRAVITY_STRENGTH * FRICTION_COEFFICIENT * time
+    if vt < 0:
+        vt = 0
+    return vt
+
+
 def get_box_pos(time):
-    pass
+    global box_stop_x
+    x0 = get_box_x0()
+    fr_grav_deflection = (GRAVITY_STRENGTH * FRICTION_COEFFICIENT * math.pow(time, 2)) / 2
+    if get_box_current_velocity(time) > 0:
+        xt = x0 + get_box_start_velocity() * time - fr_grav_deflection
+        box_stop_x = xt
+    return box_stop_x

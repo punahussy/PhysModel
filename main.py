@@ -22,7 +22,7 @@ cases = [
 ]
 
 
-currentCase = Case(10, 1, 20)
+currentCase = Case(10, 5, 36)
 
 
 def manual_input():
