@@ -8,8 +8,7 @@ box_stop_x = 0
 ANGLE = 45  # degrees
 FRICTION_COEFFICIENT = 0.58  # concrete
 GRAVITY_STRENGTH = 9.8
-last_case = (1, 5, 15)
-height = 0
+height = 250
 
 BALL_MAX_MASS = 220
 BALL_MAX_VELOCITY = constants.speed_of_light
@@ -23,8 +22,7 @@ def emulate(m1: float, m2: float, v: float):
         box_mass = m2
         global ball_start_velocity
         ball_start_velocity = v
-        global last_case
-        last_case = (m1, m2, v)
+        print("Высота по умолчанию {} метров".format(height))
         print("Пройденное растояние: {} метров".format(round(calculateDistance(), 2)))
         return True
     else:
@@ -45,7 +43,7 @@ def set_values(m1: float, m2: float, v: float, h: int):
 
 
 def calculateDistance():
-    box_velocity = (ball_mass * ball_start_velocity * math.sin(math.radians(ANGLE))) / (ball_mass + box_mass)
+    box_velocity = (ball_mass * get_final_ball_velocity() * math.sin(math.radians(ANGLE))) / (ball_mass + box_mass)
     print("Ящик развил скорость: {} м/c".format(round(box_velocity), 2))
     friction = 2 * FRICTION_COEFFICIENT * GRAVITY_STRENGTH
     distance = math.pow(box_velocity, 2) / friction

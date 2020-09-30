@@ -2,7 +2,8 @@ from emulator import emulate
 from scipy import constants as constants
 from visualizer import visualize
 
-VISUAL_DEBUG = True
+VISUAL_DEBUG = False
+
 
 class Case:
     def __init__(self, m1, m2, v1):
@@ -48,7 +49,8 @@ def run_test_cases():
 
 def console():
     print("Введите команду:")
-    command = input("tests - Запутстить тестовые случаи. \nmanual - Ввести данные вручную \nquit - выйти\n").lower()
+    command = input("tests - Запустить тестовые случаи. \nmanual - Ввести данные вручную \n visualize - Запустить "
+                    "визуализацию последнего введенного случая. \nquit - выйти\n").lower()
     while command != "q":
         if command == "":
             command = input().lower()
@@ -58,7 +60,10 @@ def console():
             run_test_cases()
         elif command[0] == "m":
             manual_input()
+            print("==========")
+            print("Вы ввели данные вручную: \nВведите команду visualize чтобы увидеть визуализацию")
         elif command[0] == "v":
+            print("Идет запуск визуализации... \n [Q] - Закрыть окно \n [R] - Проиграть демонстрацию сначала")
             visualize(currentCase.m1, currentCase.m2, currentCase.v1)
         else:
             print("Команда не опознана")
