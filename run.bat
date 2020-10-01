@@ -1,3 +1,0 @@
-echo off
-echo Loading...
-python main.py
