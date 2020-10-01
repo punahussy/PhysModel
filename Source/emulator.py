@@ -1,5 +1,4 @@
 import math
-from scipy import constants
 
 ball_mass = 0  # kg
 ball_start_velocity = 0  # m/s
@@ -11,7 +10,7 @@ GRAVITY_STRENGTH = 9.8
 height = 250
 
 BALL_MAX_MASS = 220
-BALL_MAX_VELOCITY = constants.speed_of_light
+BALL_MAX_VELOCITY = 299000000
 
 
 def emulate(m1: float, m2: float, v: float):

@@ -1,5 +1,4 @@
 from emulator import emulate
-from scipy import constants as constants
 from visualizer import visualize
 
 VISUAL_DEBUG = False
@@ -15,7 +14,7 @@ class Case:
 cases = [
     Case(20, 40, 5),
     Case(50, 10, 10),
-    Case(1, 25, constants.speed_of_sound),
+    Case(1, 25, 330),
     Case(400, 25, 10),
     Case(10, 25, 100000000000000000),
     Case(0, 9, 1,),
